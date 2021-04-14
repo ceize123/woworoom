@@ -32,11 +32,15 @@ function getOrderData() {
 //Order display
 function renderOrder() {
 	let str = "";
+	let productStr = "";
 	orderData.forEach((item) => {
 		let timeInMs = new Date(item.createdAt);
 		let Y = timeInMs.getFullYear() + "/";
 		let M = (timeInMs.getMonth()+1 < 10 ? "0"+(timeInMs.getMonth()+1) : timeInMs.getMonth()+1) + "/";
 		let D = timeInMs.getDate();
+		item.products.forEach((item) => {
+			productStr += `<p>${item.title}x${item.quantity}</>`;
+		});
 
 		str += `
 		<tr class="${item.id}">
@@ -44,7 +48,7 @@ function renderOrder() {
 			<td>${item.user.name}<span>${item.user.tel}</span></td>
 			<td>${item.user.address}</td>
 			<td>${item.user.email}</td>
-			<td>${item.products[0].title}</td>
+			<td>${productStr}</td>
 			<td>${Y+M+D}</td>
 			<td><a class="status" data-status="${item.paid}" data-id="${item.id}">${item.paid == true ? "已處理" : "未處理" }</a></td>
 			<td><p class="delete" data-id="${item.id}">刪除</p></td>
