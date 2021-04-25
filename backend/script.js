@@ -9,11 +9,6 @@ const config = {
 let orderData = [];
 let productName = {};
 let c3Data = [];
-const color1 = "#DACBFF";
-const color2 = "#9D7FEA";
-const color3 = "#5434A7";
-const color4 = "#301E5F";
-let colors = [color1, color2, color3, color4];
 let orderInfo = document.querySelector(".orderInfo > table");
 let deleteAll = document.querySelector(".orderInfo > button");
 
@@ -34,12 +29,12 @@ function renderOrder() {
 	let str = "";
 	let productStr = "";
 	orderData.forEach((item) => {
-		let timeInMs = new Date(item.createdAt);
+		let timeInMs = new Date(item.createdAt * 1000);
 		let Y = timeInMs.getFullYear() + "/";
 		let M = (timeInMs.getMonth()+1 < 10 ? "0"+(timeInMs.getMonth()+1) : timeInMs.getMonth()+1) + "/";
 		let D = timeInMs.getDate();
 		item.products.forEach((item) => {
-			productStr += `<p>${item.title}x${item.quantity}</>`;
+			productStr += `<p>${item.title}x${item.quantity}</p>`;
 		});
 
 		str += `
@@ -50,7 +45,7 @@ function renderOrder() {
 			<td>${item.user.email}</td>
 			<td>${productStr}</td>
 			<td>${Y+M+D}</td>
-			<td><a class="status" data-status="${item.paid}" data-id="${item.id}">${item.paid == true ? "已處理" : "未處理" }</a></td>
+			<td><a class="status" data-status="${item.paid}" data-id="${item.id}">${item.paid ? "已處理" : "未處理" }</a></td>
 			<td><p class="delete" data-id="${item.id}">刪除</p></td>
 		</tr>
 		`;
@@ -141,6 +136,7 @@ function creatC3Data() {
 	let j;
 	let str = "";
 	let num;
+
 	//sort products
 	product.forEach((item, index) => {
 		num = productName[item];
@@ -157,13 +153,17 @@ function creatC3Data() {
 		}
 	});
 
+	// product.sort(function (a, b) {
+	// 	return b[1] - a[1];
+	// });
+
 	if (product.length >= 4) {
 		let others = 0;
 		for (let i = 3; i < product.length; i++) {
 			others += productName[product[i]];
 			delete productName[product[i]];
 		}
-		product.splice(3, product.length);
+		product.splice(3);
 		product.push("其他");
 		productName["其他"] = others;
 	}
@@ -177,23 +177,19 @@ function creatC3Data() {
 }
 
 function renderC3() {
-	let colorArray = {};
-	//set colors
-	c3Data.forEach((item, index) => {
-		colorArray[item[0]] = colors[index];
-	});
-
 	const chart = c3.generate({
 		bindo: "#chart",
 		data: {
 			columns: c3Data,
 			type: "pie",
-			colors:	colorArray
 		},
 		size: {
 			width: 1100,
 			height: 350
 		},
+		color: {
+			pattern: ["#DACBFF", "#9D7FEA", "#5434A7", "#301E5F"]
+		}
 	});
 }
 

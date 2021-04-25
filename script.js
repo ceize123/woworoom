@@ -213,11 +213,11 @@ orderInfo.addEventListener("click", function(e) {
 			axios.post(`${generalURL}/customer/${api_path}/orders`, {
 				"data": {
 					"user": {
-						"name": `${name.value}`,
-						"tel": `${tel.value}`,
-						"email": `${email.value}`,
-						"address": `${address.value}`,
-						"payment": `${tradeMethod.value}`
+						"name": name.value,
+						"tel": tel.value,
+						"email": email.value,
+						"address": address.value,
+						"payment": tradeMethod.value
 					}
 				}
 			})
